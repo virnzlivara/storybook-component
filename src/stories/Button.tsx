@@ -25,13 +25,16 @@ export const Button = ({
 }: ButtonProps) => {
   const mode = primary ? 'storybook-button--primary' : 'storybook-button--secondary';
   return (
-    <button
-      type="button"
-      className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
-      style={{ backgroundColor }}
-      {...props}
-    >
-      {label}
-    </button>
+    // <button
+    //   type="button"
+    //   className={['storybook-button', `storybook-button--${size}`, mode].join(' ')}
+    //   style={{ backgroundColor }}
+    //   {...props}
+    // >
+    //   {label}
+    // </button>
+    <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+    {label}
+  </button>
   );
 };
