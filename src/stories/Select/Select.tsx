@@ -9,8 +9,7 @@ import type {
   SelectTriggerProps,
   SelectValueProps,
 } from "./types";
-import { cn } from "../../lib/utils/cn";
-
+import { cn } from "../../lib/utils/cn"; 
 const SelectContext = createContext<SelectContextType | null>(null);
 
 export const Select = ({
@@ -93,25 +92,22 @@ export const Select = ({
         )}
       >
         {children} 
-
         {contextValue.isOpen &&
-          contextValue.renderOptions!(
-            contextValue.options
-              .filter((option) =>
-                option.label
-                  .toLowerCase()
-                  .includes(contextValue.searchFilter?.toLowerCase() ?? "")
-              )
-              .map((option) => ({
-                ...option,
-                label: (
-                  <HighlightedLabel
-                    label={option.label}
-                    search={contextValue.searchFilter}
-                  />
-                ),
-              }))
-          )}
+        contextValue.renderOptions!(
+          contextValue.options
+            .filter((option) =>
+              option.label.toLowerCase().includes(contextValue.searchFilter?.toLowerCase() ?? "")
+            )
+            .map((option) => ({
+              ...option,
+              label: (
+                <HighlightedLabel
+                  label={option.label}
+                  search={contextValue.searchFilter}
+                />
+              ),
+            }))
+        )}
       </div>
     </SelectContext.Provider>
   );
@@ -201,10 +197,12 @@ const SelectValue = ({
       {selectedValue?.map((value: string) => (
         <div
           className="flex justify-between gap-2 items-center w-fit bg-gray-100 rounded-2xl p-1 text-gray-500 text-sm z-50 "
+          data-testid={`selected-${value}`}
           key={value}
         >
           {value}
           <CircleX
+            data-testid="remove-item"
             className="cursor-pointer"
             size={20}
             onClick={(e) => {
@@ -256,7 +254,7 @@ const SelectContent = ({
   }, [isOpen]);
 
   if (!isOpen) return null;
-  const labelWidth = labelRef.current.clientWidth;
+  const labelWidth = labelRef?.current?.clientWidth;
   const baseClassName = cn(
     `shadow-1 absolute right-0  z-[1001] mt-1 rounded  border border-gray-300 bg-white ml-2`,
     openUpward ? "bottom-full mb-1" : "top-full mt-1"
@@ -273,12 +271,12 @@ const SelectContent = ({
     >
       <div
         className={cn(
-          " relative flex items-center gap-2 border-b border-gray-300 p-2",
-          { hidden: !withSearch }
+          " relative flex items-center gap-2 border-b border-gray-300 p-2", 
         )}
       >
-        <Search size={20} className="absolute" />
-        <input
+        <Search size={20} className="absolute" /> 
+        {withSearch && (
+          <input
           type={"text"} 
           onChange={(e) => {
             setSearchFilter(e.target.value); 
@@ -286,6 +284,7 @@ const SelectContent = ({
           className={cn("w-full pl-6 outline-none", className)} 
           {...rest}
         />
+)}
       </div>
       {children}
     </div>
@@ -305,23 +304,15 @@ const SelectItem = ({
   if (!context) {
     throw new Error("SelectItem must be used within a Select component");
   }
-  const { selectedValue, handleValueChange } = context;
-  debugger;
-  const isSelected = selectedValue.includes(value.props.label);
-  const baseClassName =
-    "flex cursor-pointer gap-2 px-4 py-2 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none";
-  const borderTopCss = "first:rounded-t-md last:rounded-b-md";
-  const borderBottomCss = "last:rounded-b-md";
+  const { handleValueChange } = context;
 
   return (
     <div
       className={cn(
-        baseClassName,
-        { "bg-green-100": isSelected },
-        className,
-        borderTopCss,
-        borderBottomCss
+        "flex cursor-pointer gap-2 px-4 py-2 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none",
+        className
       )}
+      data-testid={`option-${value.props.label.toLowerCase()}`} // Add unique test ID
       onClick={() => handleValueChange(value.props.label)}
       {...rest}
     >
