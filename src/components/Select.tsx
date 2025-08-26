@@ -8,9 +8,9 @@ import type {
   SelectProps,
   SelectTriggerProps,
   SelectValueProps,
-} from "./types";
-import { cn } from "../../lib/utils/cn"; 
-const SelectContext = createContext<SelectContextType | null>(null);
+} from "../stories/Select/types";
+import { cn } from "../lib/utils/cn";  
+const SelectContext = createContext<SelectContextType>(null as any);
 
 export const Select = ({
   onValueChange,
@@ -29,8 +29,8 @@ export const Select = ({
     defaultValue || []
   );
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const labelRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null!);
+  const labelRef = useRef<HTMLDivElement>(null!);
   const handleValueChange = (value: string) => { 
     if (isMultiple) {
       if (selectedValue.includes(value)) {
@@ -159,7 +159,7 @@ const SelectTrigger = ({
     >
       {children}
       <ChevronDown
-        className={cn("text-leaf-green-1 h-4 w-4 transition-transform", {
+        className={cn("h-4 w-4 transition-transform", {
           [disabledCss]: isDisabled,
           "rotate-180": isOpen,
         })}
@@ -172,10 +172,7 @@ SelectTrigger.displayName = "Select.SelectTrigger";
 Select.SelectTrigger = SelectTrigger;
 const SelectValue = ({
   placeholder,
-  className,
-  onFocus,
-  type = "text",
-  ...rest
+  className, 
 }: SelectValueProps) => {
   const context = useContext(SelectContext);
   if (!context) {
@@ -184,7 +181,7 @@ const SelectValue = ({
   const { selectedValue, setSelectedValue } = context;
 
   const removeItem = (value: string) => {
-    const newValue = selectedValue.filter((v) => v !== value);
+    const newValue = selectedValue.filter((v) => v !== value) ;
     setSelectedValue(newValue);
     context.onValueChange?.(newValue.join(", "));
   };
@@ -304,15 +301,23 @@ const SelectItem = ({
   if (!context) {
     throw new Error("SelectItem must be used within a Select component");
   }
-  const { handleValueChange } = context;
+  const { selectedValue, handleValueChange } = context;
+ 
+  const isSelected = selectedValue.includes(value.props.label);
+  const baseClassName =
+    "flex cursor-pointer gap-2 px-4 py-2 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none";
+  const borderTopCss = "first:rounded-t-md last:rounded-b-md";
+  const borderBottomCss = "last:rounded-b-md";
 
   return (
     <div
       className={cn(
-        "flex cursor-pointer gap-2 px-4 py-2 text-sm hover:bg-gray-100 focus:bg-gray-100 focus:outline-none",
-        className
+        baseClassName,
+        { "bg-green-100": isSelected },
+        className,
+        borderTopCss,
+        borderBottomCss
       )}
-      data-testid={`option-${value.props.label.toLowerCase()}`} // Add unique test ID
       onClick={() => handleValueChange(value.props.label)}
       {...rest}
     >

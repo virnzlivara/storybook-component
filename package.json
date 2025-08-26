@@ -1,11 +1,16 @@
 {
-  "name": "sb",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "sb-framework",
+  "version": "0.1.1",
+  "type": "module", 
+"main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+   "build": "vite build && tsc --emitDeclarationOnly",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
@@ -21,7 +26,8 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "tailwind-merge": "^3.3.1",
-    "tailwindcss": "^4.1.12"
+    "tailwindcss": "^4.1.12",
+    "vite-plugin-dts": "^4.5.4"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",

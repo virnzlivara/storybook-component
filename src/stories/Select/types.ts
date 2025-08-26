@@ -33,19 +33,23 @@ export type SelectContextType = {
   isOpen: boolean; 
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   selectedValue:  string[];
-  setSelectedValue: React.Dispatch<React.SetStateAction<string>>;
-  setSearchFilter: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedValue: (val: string[]) => void;
+  searchFilter: string;
+  setSearchFilter: (val: string) => void;
   handleValueChange: (value: string) => void;
   onValueChange: (val: string) => void;
   disabled?: boolean;
   triggerRef: React.RefObject<HTMLDivElement>;
   labelRef: React.RefObject<HTMLDivElement>;
   withSearch: boolean | undefined;
+  isMultiple: boolean | undefined;
+  options?: Record<string, any>[];
+  renderOptions?: (data: Record<string, any>[]) => React.ReactNode;
 };
 
 export type SelectContentProps = BaseSelectProps;
 export type SelectItemProps = BaseSelectProps & {
-  value: React.ReactNode;
+  value: PropsWithChildren<{ props: Record<string, any> }>;
 };
 
 export type SelectLabelProps = BaseSelectProps & {

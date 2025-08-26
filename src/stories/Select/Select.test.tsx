@@ -1,7 +1,7 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
-import { Select } from "./Select";
+import { Select } from "../../components/Select";
 
 const options = [
   { label: "Apple", value: "apple" },
@@ -84,7 +84,7 @@ describe("Select", () => {
 
     expect(screen.getByText("Apple")).toBeInTheDocument();
 
-    const removeBtn = screen.getByTestId("remove-item", { hidden: true });
+    const removeBtn = screen.getByTestId("remove-item");
     await userEvent.click(removeBtn);
 
     expect(handleChange).toHaveBeenCalledWith("");
